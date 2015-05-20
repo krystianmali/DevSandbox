@@ -1,0 +1,25 @@
+Vagrant.configure(2) do |config|
+
+#welche box
+config.vm.box = "ubuntu/trusty64"
+config.vm.box_url = "https://atlas.hashicorp.com/ubuntu/boxes/trusty64"
+#wie ist sie konfiguriert
+config.vm.provider "virtualbox" do |v|
+  v.memory = 512
+  v.cpus = 1
+end
+
+config.vm.provision :chef_solo do |chef|
+	chef.cookbooks_path = ["./cookbooks"]
+	chef.json ={
+		"postgresql" => {
+	  		"password" => { 
+	    	"postgres" => "i_love_random_passwords_but"
+	   
+	   		}
+		}
+	}
+	chef.run_list = ["recipe[postgresql::server]"]
+
+end	
+end
